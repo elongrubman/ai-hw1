@@ -261,11 +261,13 @@ class MDAProblem(GraphProblem):
          In order to create a set from some other collection (list/tuple) you can just `set(some_other_collection)`.
         """
         assert isinstance(state, MDAState)
+        if state.tests_on_ambulance | state.tests_transferred_to_lab == self.problem_input.reported_apartments:
+            x=5
         locations_set = set(lab.location for lab in self.problem_input.laboratories)
         return state.current_location in locations_set \
                and state.tests_on_ambulance == frozenset()\
-               and state.tests_transferred_to_lab == frozenset(self.problem_input.reported_apartments)\
-               and state.visited_labs <= frozenset(self.problem_input.laboratories)
+               and state.tests_transferred_to_lab == self.problem_input.reported_apartments\
+               and state.visited_labs <= set(self.problem_input.laboratories)
 
     def get_zero_cost(self) -> Cost:
         """
