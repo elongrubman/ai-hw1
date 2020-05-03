@@ -137,13 +137,10 @@ class BestFirstSearch(GraphProblemSolver):
             max_nr_stored_states = max(max_nr_stored_states, _get_current_nr_stored_states())
 
             exceeded_max_nr_expanded_states = False
-            flag = True
             while True:
                 next_node_to_expand = self._extract_next_search_node_to_expand(problem)
                 if next_node_to_expand is None:
                     break
-                if nr_expanded_states > 15:
-                    flag = False
                 if problem.is_goal(next_node_to_expand.state):
                     final_search_node = next_node_to_expand
                     break
@@ -162,8 +159,6 @@ class BestFirstSearch(GraphProblemSolver):
                         parent_search_node=next_node_to_expand,
                         operator_cost=operator_result.operator_cost,
                         operator_name=operator_result.operator_name)
-                    if operator_result.operator_name is not None and flag:
-                        print(str(next_node_to_expand))
                     successor_node.expanding_priority = self._calc_node_expanding_priority(successor_node)
                     if self.open_criterion is None or self.open_criterion(successor_node):
                         self._open_successor_node(problem, successor_node)
@@ -181,7 +176,6 @@ class BestFirstSearch(GraphProblemSolver):
             stop_reason=stop_reason
         )
 
-    # tmp2
     def _init_solver(self, problem: GraphProblem):
         """
         Called once by `solve_problem()` right after creating `open` and `close`.
