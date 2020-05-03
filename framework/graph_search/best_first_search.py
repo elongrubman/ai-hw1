@@ -176,6 +176,7 @@ class BestFirstSearch(GraphProblemSolver):
             stop_reason=stop_reason
         )
 
+    # tmp
     def _init_solver(self, problem: GraphProblem):
         """
         Called once by `solve_problem()` right after creating `open` and `close`.

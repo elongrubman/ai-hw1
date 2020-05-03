@@ -266,7 +266,7 @@ class MDAProblem(GraphProblem):
                and state.tests_on_ambulance == frozenset()\
                and state.tests_transferred_to_lab == frozenset(self.problem_input.reported_apartments)\
                and state.visited_labs <= frozenset(self.problem_input.laboratories)
-
+    # tmp
     def get_zero_cost(self) -> Cost:
         """
         Overridden method of base class `GraphProblem`. For more information, read
