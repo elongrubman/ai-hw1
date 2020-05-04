@@ -294,8 +294,16 @@ class MDAProblem(GraphProblem):
         This includes the ambulance's current location, and the locations of the reported apartments
          that hasn't been visited yet.
         The list should be ordered by the junctions index ascendingly (small to big).
-        TODO [Ex.16]: Implement this method.
+        DONE [Ex.16]: Implement this method.
             Use the method `self.get_reported_apartments_waiting_to_visit(state)`.
             Use python's `sorted(..., key=...)` function.
         """
-        raise NotImplementedError  # TODO: remove this line!
+        remaining_apartments = self.get_reported_apartments_waiting_to_visit(state)
+        list1 = [apartment.location for apartment in remaining_apartments]
+        list1.insert(0,state.current_site)
+        list_of_remaining_apartments_by_tuples = [(junction.index,junction) for junction in list1]
+        list_of_remaining_apartments_by_tuples.sort(key=lambda tup: tup[0])
+        list_of_remaining_apartments = [tup[1] for tup in list_of_remaining_apartments_by_tuples]
+        # for x in list_of_remaining_apartments:
+        #     print(x.index)
+        return list_of_remaining_apartments
