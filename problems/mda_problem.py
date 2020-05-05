@@ -299,11 +299,8 @@ class MDAProblem(GraphProblem):
             Use python's `sorted(..., key=...)` function.
         """
         remaining_apartments = self.get_reported_apartments_waiting_to_visit(state)
-        list1 = [apartment.location for apartment in remaining_apartments]
-        list1.insert(0,state.current_site)
-        list_of_remaining_apartments_by_tuples = [(junction.index,junction) for junction in list1]
-        list_of_remaining_apartments_by_tuples.sort(key=lambda tup: tup[0])
-        list_of_remaining_apartments = [tup[1] for tup in list_of_remaining_apartments_by_tuples]
-        # for x in list_of_remaining_apartments:
-        #     print(x.index)
+        list_of_remaining_apartments = [apartment.location for apartment in remaining_apartments]
+        list_of_remaining_apartments.append(state.current_site)
+        list_of_remaining_apartments.sort(key=lambda junction: junction.index)
+
         return list_of_remaining_apartments
