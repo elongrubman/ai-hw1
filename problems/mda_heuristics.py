@@ -146,10 +146,19 @@ class MDAMSTAirDistHeuristic(HeuristicFunction):
             for j2 in junctions:
                 if j1 != j2:
                     G.add_edge(j1,j2,wieght=self.cached_air_distance_calculator.get_air_distance_between_junctions(j1,j2))
-            junctions.remove(j1)
+
+        # pos = nx.spring_layout(G)  # positions for all nodes
+
+        # # nodes
+        # nx.draw_networkx_nodes(G, pos)
+        #
+        # # edges
+        # nx.draw_networkx_edges(G, pos)
+        # nx.draw_networkx_edges(G, pos)
 
         T = nx.tree.minimum_spanning_tree(G)
-        return T.size(weight='wieght')
+
+        return T.size(weight='weight')
 
 
 class MDATestsTravelDistToNearestLabHeuristic(HeuristicFunction):

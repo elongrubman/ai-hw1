@@ -240,6 +240,8 @@ class MDAProblem(GraphProblem):
                 succ_state = MDAState(lab.location, frozenset(), new_transferred_set, new_matoshim_num, frozenset(new_labs_set))
                 yield OperatorResult(succ_state, self.get_operator_cost(state_to_expand, succ_state), 'Go to lab ' + lab.name)
 
+
+
     def get_operator_cost(self, prev_state: MDAState, succ_state: MDAState) -> MDACost:
         """
         Calculates the operator cost (of type `MDACost`) of an operator (moving from the `prev_state`

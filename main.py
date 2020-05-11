@@ -195,23 +195,23 @@ def mda_problem_with_astar_experiments():
     # Ex.17
     # DONE: create an instance of `AStar` with the `MDAMaxAirDistHeuristic`,
     #       solve the `moderate_mda_problem_with_distance_cost` with it and print the results.
-    astar = AStar(MDAMaxAirDistHeuristic)
-    res = astar.solve_problem(moderate_mda_problem_with_distance_cost)
-    print(res)
-
-    # Ex.20
-    # DONE: create an instance of `AStar` with the `MDASumAirDistHeuristic`,
-    #       solve the `moderate_mda_problem_with_distance_cost` with it and print the results.
-    astar = AStar(MDASumAirDistHeuristic)
-    res = astar.solve_problem(moderate_mda_problem_with_distance_cost)
-    print(res)
+    # astarMaxAirDist = AStar(MDAMaxAirDistHeuristic)
+    # resMaxAirDist = astarMaxAirDist.solve_problem(moderate_mda_problem_with_distance_cost)
+    # print(resMaxAirDist)
+    #
+    # # Ex.20
+    # # DONE: create an instance of `AStar` with the `MDASumAirDistHeuristic`,
+    # #       solve the `moderate_mda_problem_with_distance_cost` with it and print the results.
+    # astarSumAirDist = AStar(MDASumAirDistHeuristic)
+    # resSumAirDist = astarSumAirDist.solve_problem(moderate_mda_problem_with_distance_cost)
+    # print(resSumAirDist)
 
     # Ex.23
     # DONE: create an instance of `AStar` with the `MDAMSTAirDistHeuristic`,
     #       solve the `moderate_mda_problem_with_distance_cost` with it and print the results.
-    astar = AStar(MDAMSTAirDistHeuristic)
-    res = astar.solve_problem(moderate_mda_problem_with_distance_cost)
-    print(res)
+    astarMSTAirDist = AStar(MDAMSTAirDistHeuristic)
+    resMSTAirDist = astarMSTAirDist.solve_problem(moderate_mda_problem_with_distance_cost)
+    print(resMSTAirDist)
 
 
 def mda_problem_with_weighted_astar_experiments():
@@ -305,10 +305,10 @@ def mda_problem_anytime_astar_experiments():
 
 def run_all_experiments():
     print('Running all experiments')
-    toy_map_problem_experiments()
-    basic_mda_problem_experiments()
+    # toy_map_problem_experiments()
+    # basic_mda_problem_experiments()
     mda_problem_with_astar_experiments()
-    mda_problem_with_weighted_astar_experiments()
+    # mda_problem_with_weighted_astar_experiments()
     multiple_objectives_mda_problem_experiments()
     mda_problem_with_astar_epsilon_experiments()
     mda_problem_anytime_astar_experiments()
