@@ -92,8 +92,8 @@ class MDASumAirDistHeuristic(HeuristicFunction):
             return 0
 
         remaining_distance_estimation = 0
-        all_certain_junctions_in_remaining_ambulance_path.discard(state.current_site)
-        current_node = state.current_site
+        all_certain_junctions_in_remaining_ambulance_path.discard(state.current_location)
+        current_node = state.current_location
         while len(all_certain_junctions_in_remaining_ambulance_path) > 0:
             tmp_list = [(self.cached_air_distance_calculator.get_air_distance_between_junctions(current_node,junction),junction)
                     for junction in all_certain_junctions_in_remaining_ambulance_path]
@@ -145,17 +145,7 @@ class MDAMSTAirDistHeuristic(HeuristicFunction):
         for j1 in junctions:
             for j2 in junctions:
                 if j1 != j2:
-                    G.add_edge(j1,j2,wieght=self.cached_air_distance_calculator.get_air_distance_between_junctions(j1,j2))
-
-        # pos = nx.spring_layout(G)  # positions for all nodes
-
-        # # nodes
-        # nx.draw_networkx_nodes(G, pos)
-        #
-        # # edges
-        # nx.draw_networkx_edges(G, pos)
-        # nx.draw_networkx_edges(G, pos)
-
+                    G.add_edge(j1, j2, weight=self.cached_air_distance_calculator.get_air_distance_between_junctions(j1, j2))
         T = nx.tree.minimum_spanning_tree(G)
 
         return T.size(weight='weight')
@@ -181,7 +171,7 @@ class MDATestsTravelDistToNearestLabHeuristic(HeuristicFunction):
         The rest part of the total remained cost includes the distance between each non-visited reported-apartment
          and the closest lab (to this apartment) times the roommates in this apartment (as we take tests for all
          roommates).
-        TODO [Ex.29]:
+        DONE [Ex.29]:
             Complete the implementation of this method.
             Use `self.problem.get_reported_apartments_waiting_to_visit(state)`.
         """
@@ -192,6 +182,14 @@ class MDATestsTravelDistToNearestLabHeuristic(HeuristicFunction):
             """
             Returns the distance between `junction` and the laboratory that is closest to `junction`.
             """
-            return min(...)  # TODO: replace `...` with the relevant implementation.
+            return min(self.cached_air_distance_calculator.get_air_distance_between_junctions(lab.location, junction)
+                       for lab in self.problem.problem_input.laboratories)
 
-        raise NotImplementedError
+        # cost = air_dist_to_closest_lab(state.current_location) * state.get_total_nr_tests_taken_and_stored_on_ambulance()
+        # for apartment in self.problem.get_reported_apartments_waiting_to_visit(state):
+        #     cost += air_dist_to_closest_lab(apartment.location) * apartment.nr_roommates
+        # return cost
+
+        return air_dist_to_closest_lab(state.current_location) * state.get_total_nr_tests_taken_and_stored_on_ambulance() \
+               + sum(air_dist_to_closest_lab(apartment.location) * apartment.nr_roommates
+                    for apartment in self.problem.get_reported_apartments_waiting_to_visit(state))

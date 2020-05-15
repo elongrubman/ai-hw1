@@ -225,10 +225,10 @@ class MDAProblem(GraphProblem):
                 new_tests_set = set(state_to_expand.tests_on_ambulance)
                 new_tests_set.add(apartment)
                 new_matoshim_num = state_to_expand.nr_matoshim_on_ambulance - apartment.nr_roommates
-                succ_state = MDAState(apartment.location, frozenset(new_tests_set),
+                succ_state = MDAState(apartment, frozenset(new_tests_set),
                                       state_to_expand.tests_transferred_to_lab,
                                       new_matoshim_num, state_to_expand.visited_labs)
-                yield OperatorResult(succ_state, self.get_operator_cost(state_to_expand, succ_state), 'Visit ' + apartment.reporter_name)
+                yield OperatorResult(succ_state, self.get_operator_cost(state_to_expand, succ_state), 'visit ' + apartment.reporter_name)
 
         # lab successors
         for lab in self.problem_input.laboratories:
@@ -237,8 +237,8 @@ class MDAProblem(GraphProblem):
                 new_labs_set = set(state_to_expand.visited_labs)
                 new_labs_set.add(lab)
                 new_matoshim_num = state_to_expand.nr_matoshim_on_ambulance + (0 if lab in state_to_expand.visited_labs else lab.max_nr_matoshim)
-                succ_state = MDAState(lab.location, frozenset(), new_transferred_set, new_matoshim_num, frozenset(new_labs_set))
-                yield OperatorResult(succ_state, self.get_operator_cost(state_to_expand, succ_state), 'Go to lab ' + lab.name)
+                succ_state = MDAState(lab, frozenset(), new_transferred_set, new_matoshim_num, frozenset(new_labs_set))
+                yield OperatorResult(succ_state, self.get_operator_cost(state_to_expand, succ_state), 'go to lab ' + lab.name)
 
 
 
@@ -252,7 +252,8 @@ class MDAProblem(GraphProblem):
          between to junctions.
         """
         distance_cost = self.map_distance_finder.get_map_cost_between(prev_state.current_location, succ_state.current_location)
-        tests_travel_distance_cost = prev_state.get_total_nr_tests_taken_and_stored_on_ambulance() * distance_cost
+        distance_cost = float('inf') if distance_cost is None else distance_cost
+        tests_travel_distance_cost = float('inf') if distance_cost is None else prev_state.get_total_nr_tests_taken_and_stored_on_ambulance() * distance_cost
         return MDACost(distance_cost, tests_travel_distance_cost, self.optimization_objective)
 
     def is_goal(self, state: GraphProblemState) -> bool:
@@ -263,8 +264,8 @@ class MDAProblem(GraphProblem):
          In order to create a set from some other collection (list/tuple) you can just `set(some_other_collection)`.
         """
         assert isinstance(state, MDAState)
-        locations_set = set(lab.location for lab in self.problem_input.laboratories)
-        return state.current_location in locations_set \
+
+        return state.current_location in set(lab.location for lab in self.problem_input.laboratories) \
                and state.tests_on_ambulance == frozenset()\
                and state.tests_transferred_to_lab == frozenset(self.problem_input.reported_apartments)\
                and state.visited_labs <= frozenset(self.problem_input.laboratories)
@@ -302,7 +303,7 @@ class MDAProblem(GraphProblem):
         """
         remaining_apartments = self.get_reported_apartments_waiting_to_visit(state)
         list_of_remaining_apartments = [apartment.location for apartment in remaining_apartments]
-        list_of_remaining_apartments.append(state.current_site)
+        list_of_remaining_apartments.append(state.current_location)
         list_of_remaining_apartments.sort(key=lambda junction: junction.index)
 
         return list_of_remaining_apartments
