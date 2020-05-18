@@ -290,13 +290,14 @@ def mda_problem_with_astar_epsilon_experiments():
 
     # Ex.39
     # Try using A*eps to improve the speed (#dev) with a non-acceptable heuristic.
-    # TODO: Create an instance of `AStarEpsilon` with the `MDAMSTAirDistHeuristic`.
+    # DONE: Create an instance of `AStarEpsilon` with the `MDAMSTAirDistHeuristic`.
     #       Solve the `small_mda_problem_with_distance_cost` with it and print the results.
     #       Use focal_epsilon=0.03, and max_focal_size=40.
     #       Use within_focal_priority_function=within_focal_h_sum_priority_function. This function
     #        (defined just above) is internally using the `MDASumAirDistHeuristic`.
-    exit()  # TODO: remove!
-
+    a_star_epsilon = AStarEpsilon(MDAMSTAirDistHeuristic,within_focal_h_sum_priority_function,0.5,None,0.03,40)
+    res = a_star_epsilon.solve_problem(small_mda_problem_with_distance_cost)
+    print(res)
 
 def mda_problem_anytime_astar_experiments():
     print()
@@ -306,11 +307,12 @@ def mda_problem_anytime_astar_experiments():
     moderate_mda_problem_with_distance_cost = get_mda_problem('moderate', MDAOptimizationObjective.Distance)
 
     # Ex.41
-    # TODO: create an instance of `AnytimeAStar` once with the `MDAMSTAirDistHeuristic`, with
+    # DONE: create an instance of `AnytimeAStar` once with the `MDAMSTAirDistHeuristic`, with
     #       `max_nr_states_to_expand_per_iteration` set to 150, solve the
     #       `moderate_mda_problem_with_distance_cost` with it and print the results.
-    exit()  # TODO: remove!
-
+    anytime = AnytimeAStar(MDAMSTAirDistHeuristic,150)
+    res = anytime.solve_problem(moderate_mda_problem_with_distance_cost)
+    print(res)
 
 def run_all_experiments():
     print('Running all experiments')
